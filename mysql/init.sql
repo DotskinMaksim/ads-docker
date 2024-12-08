@@ -1,0 +1,3 @@
+CREATE USER 'dotskin'@'%' IDENTIFIED BY '123';
+GRANT ALL PRIVILEGES ON ads_db.* TO 'dotskin'@'%';
+FLUSH PRIVILEGES;

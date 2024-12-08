@@ -1,0 +1,53 @@
+﻿server {
+    listen 80;
+    server_name ls2.myads.loc;
+
+    root /var/www/advertisements-service/client;
+
+    index index.html index.php;
+
+    # Обработка PHP
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;  # Проверьте правильность пути к сокету
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    # Обработка API запросов
+    location /api/ {
+        # Заголовки для CORS
+        add_header Access-Control-Allow-Origin *;
+        add_header Access-Control-Allow-Methods 'GET, POST, DELETE, OPTIONS';
+        add_header Access-Control-Allow-Headers 'Content-Type';
+
+        # Прокси для запросов API на backend
+        proxy_pass http://localhost:8000/api/;  # Убедитесь, что backend работает на порту 8000
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # Дополнительные настройки для работы с проксируемым API
+        proxy_http_version 1.1;
+        proxy_set_header Connection '';
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    # Статические файлы для frontend
+    location / {
+        try_files $uri $uri/ =404;  # Попытаться отдать файл, если не найдено — ошибка 404
+    }
+
+    # Дополнительные настройки для обработки других запросов (например, 404)
+    error_page 404 /404.html;
+    location = /404.html {
+        root /var/www/advertisements-service/client;
+    }
+}
+
+
+
+
+
+

@@ -1,0 +1,30 @@
+;
+; BIND data file for local loopback interface
+;
+$TTL    12000
+@       IN      SOA     ns1.myads.loc.  masterhost.myads.loc. (
+                        4967            ; Serial
+                        10000           ; Refresh
+                        3600            ; Retry
+                        500000          ; Expire
+                        86400           ; 1 day TTL neg
+);
+@               IN      NS      ns1.myads.loc.
+1               IN      PTR     ls1.myads.loc.
+2               IN      PTR     ls2.myads.loc.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
