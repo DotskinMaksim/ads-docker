@@ -9,7 +9,7 @@ ENV MYSQL_USER=dotskin
 ENV MYSQL_PASSWORD=123
 
 
-COPY create_user.sql /docker-entrypoint-initdb.d/
+COPY init.sql /docker-entrypoint-initdb.d/
 
 
 WORKDIR /var/lib/mysql
