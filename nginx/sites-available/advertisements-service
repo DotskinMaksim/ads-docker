@@ -1,4 +1,4 @@
-﻿server {
+server{
     listen 80;
     server_name ls2.myads.loc;
 
@@ -6,13 +6,7 @@
 
     index index.html index.php;
 
-    # Обработка PHP
-    location ~ \.php$ {
-        include snippets/fastcgi-php.conf;
-        fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;  # Проверьте правильность пути к сокету
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        include fastcgi_params;
-    }
+
 
     # Обработка API запросов
     location /api/ {
@@ -45,9 +39,3 @@
         root /var/www/advertisements-service/client;
     }
 }
-
-
-
-
-
-
