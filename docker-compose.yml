@@ -2,14 +2,16 @@ version: "3.8"
 
 services:
   nginx:
-    image: dotskinmaksim/ads-nginx-image:latest  # Укажите имя вашего образа для Nginx
-    container_name: nginx2        # Имя контейнера
+    image: nginx-service10:latest  # Укажите имя вашего образа для Nginx
+    container_name: nginx-container        # Имя контейнера
     ports:
       - "80:8080"                 # Прокси на порт 80 хоста
-    restart: unless-stopped       # Перезапускать контейнер в случае сбоя
+    restart: unless-stopped
+    dns:
+      - 172.18.0.3  # Здесь указываете IP вашего DNS-контейнера
 
   mysql:
-    image: dotskinmaksim/ads-sql-image:latest         # Укажите имя вашего образа для MySQL
+    image: mysql-db2:latest         # Укажите имя вашего образа для MySQL
     container_name: mysql-container  # Имя контейнера
     ports:
       - "3306:3306"               # Прокси на порт 3306 хоста
@@ -18,5 +20,10 @@ services:
       MYSQL_DATABASE: ads_database  # Имя базы данных
     restart: unless-stopped       # Перезапускать контейнер в случае сбоя
 
-
-
+  dns:
+    image: dns-service:latest         # Укажите имя вашего образа для DNS-сервера (например, bind9)
+    container_name: dns-container  # Имя контейнера
+    ports:
+      - "5353:53/udp"                # Прокси на порт 53 UDP хоста
+      - "5353:53/tcp"                # Прокси на порт 53 TCP хоста
+    restart: unless-stopped       # Перезапускать контейнер в случае сбоя
