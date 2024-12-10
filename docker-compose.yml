@@ -1,30 +1,22 @@
-version: '3.9'
+version: "3.8"
 
 services:
   nginx:
-    build:
-      context: ./nginx  # Путь к папке с Dockerfile для Nginx
-    container_name: nginx-service
+    image: dotskinmaksim/ads-nginx-image:latest  # Укажите имя вашего образа для Nginx
+    container_name: nginx2        # Имя контейнера
     ports:
-      - "80:80"  # Пробрасывает порт 80 с хоста на контейнер
-    volumes:
-      - ./nginx/site/advertisements-service/client:/var/www/advertisements-service/client
-    networks:
-      - my_network
-    depends_on:
-      - dns  # Убедитесь, что DNS-сервис запускается первым
+      - "80:8080"                 # Прокси на порт 80 хоста
+    restart: unless-stopped       # Перезапускать контейнер в случае сбоя
 
-  dns:
-    build:
-      context: ./dns  # Путь к папке с Dockerfile для BIND9
-    container_name: dns-service
+  mysql:
+    image: dotskinmaksim/ads-sql-image:latest         # Укажите имя вашего образа для MySQL
+    container_name: mysql-container  # Имя контейнера
     ports:
-      - "1053:53/udp"  # Пробрасывает порт 53/udp с хоста на контейнер
-      - "1053:53/tcp"  # Пробрасывает порт 53/tcp с хоста на контейнер
-    volumes:
-      - ./dns/bind9:/etc/bind  # Копирует конфигурационные файлы BIND9 в контейнер
-    networks:
-      - my_network
-networks:
-  my_network:
-    driver: bridge
+      - "3306:3306"               # Прокси на порт 3306 хоста
+    environment:
+      MYSQL_ROOT_PASSWORD: 123    # Укажите пароль для root
+      MYSQL_DATABASE: ads_database  # Имя базы данных
+    restart: unless-stopped       # Перезапускать контейнер в случае сбоя
+
+
+
