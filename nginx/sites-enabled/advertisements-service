@@ -1,6 +1,6 @@
 server{
     listen 8080;
-    server_name localhost;
+    server_name ls2.myads.loc;
 
     root /var/www/advertisements-service/client;
 
