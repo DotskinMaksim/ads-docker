@@ -1,18 +1,23 @@
-FROM mysql:8.0
+# Используем официальный образ MySQL
+FROM mysql:latest
 
-RUN ln -sf /usr/share/zoneinfo/Europe/Tallinn /etc/localtime && echo "Europe/Tallinn" > /etc/timezone
-
-
+# Указываем пароль для root пользователя
 ENV MYSQL_ROOT_PASSWORD=123
-ENV MYSQL_DATABASE=ads_db
-ENV MYSQL_USER=dotskin
-ENV MYSQL_PASSWORD=123
+ENV MYSQL_DATABASE=ads_database
 
-
+# Копируем dump.sql в директорию, где MySQL ожидает файлы для инициализации
 COPY init.sql /docker-entrypoint-initdb.d/
 
+# Если хотите, можно добавить дополнительную настройку MySQL
+# COPY my.cnf /etc/mysql/my.cnf
 
-WORKDIR /var/lib/mysql
+# Устанавливаем рабочую директорию
+WORKDIR /docker-entrypoint-initdb.d/
+
+# Все дальнейшие команды для запуска контейнера будут выполняться из этой директории
 
 
-EXPOSE 3306
+
+
+
+
