@@ -5,6 +5,7 @@ RUN ln -sf /usr/share/zoneinfo/Europe/Tallinn /etc/localtime && echo "Europe/Tal
 
 # Установка зависимостей для composer и npm
 RUN apt-get update && apt-get install -y \
+    nano \
     curl \
     unzip \
     git \
@@ -14,8 +15,8 @@ RUN apt-get update && apt-get install -y \
     php-xml \
     nodejs \
     npm && \
-    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer && \
+    rm -rf /var/cache/apt/archives/*
 # Копирование конфигураций Nginx
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY ./sites-available /etc/nginx/sites-available
@@ -37,6 +38,7 @@ WORKDIR /var/www/advertisements-service
 RUN composer install
 
 #
-
 # Запуск Nginx
 CMD ["nginx", "-g", "daemon off;"]
+
+
